@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# would do any platform-specific configuration here...
+
+
+echo "Will install into " $FREEMOL

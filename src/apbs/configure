@@ -1,0 +1,40 @@
+#!/bin/sh
+
+# would do any platform-specific configuration here...
+
+if ! [ $FREEMOL ]; then
+ echo "FREEMOL variable must be defined"
+ exit
+fi
+
+echo "Will install into " $FREEMOL
+APBS_VERSION=APBS-1.4
+tarfile=${APBS_VERSION}-source.tar.gz
+
+APBS_SRC=${PWD}/src/apbs
+APBS_BLD=${PWD}/build
+
+echo "APBS_SRC=$APBS_SRC" > Makefile
+echo "APBS_BLD=$APBS_BLD" >> Makefile
+echo "FREEMOL=$FREEMOL" >> Makefile
+cat Makefile.in >>Makefile
+
+cd src
+
+if [ ! -e $tarfile ]; then
+    echo "Please download $tarfile from"
+    echo
+    echo "    http://www.poissonboltzmann.org/apbs"
+    echo
+    echo "and put it into"
+    echo
+    echo "    $PWD"
+    echo
+    exit 1
+fi
+
+tar zxf $tarfile
+
+install -d $APBS_BLD
+cd $APBS_BLD
+cmake -DCMAKE_INSTALL_PREFIX=${FREEMOL} $APBS_SRC

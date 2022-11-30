@@ -1,0 +1,71 @@
+#!/bin/sh
+
+# would do any platform-specific configuration here...
+
+if [ -z "$OSTYPE" ]; then
+        OSTYPE=`uname -s`
+fi
+
+
+if ! [ $FREEMOL ]; then
+ echo "FREEMOL variable must be defined"
+ exit
+fi
+
+echo "Will install into " $FREEMOL
+export PDB2PQR_VERSION=pdb2pqr-1.8
+tarfile=${PDB2PQR_VERSION}.tar.gz
+
+cd src
+
+if [ ! -e $tarfile ]; then
+    echo "Please download $tarfile from"
+    echo
+    echo "    http://www.poissonboltzmann.org/pdb2pqr"
+    echo
+    echo "and put it into"
+    echo
+    echo "    $PWD"
+    echo
+    exit 1
+fi
+
+tar zxf $tarfile
+cd ..
+
+echo "OS=$OSTYPE"
+case "$OSTYPE" in
+*inux*)
+	#echo "linux"
+	INSTALL="install -D"
+        ;;
+darwin*)
+	#echo "darwin"
+	INSTALL="install"
+        ;;
+mingw*)
+	#echo "mingw"
+	INSTALL="install -D"
+        ;;
+msys*)
+	#echo "msys"
+	INSTALL="install -D"
+	cp src/Makefile.in.mingw src/$PDB2PQR_VERSION/Makefile.in
+	cp src/configure.mingw src/$PDB2PQR_VERSION/configure
+	if [ -e c:/python25/python.exe ] ; then
+	  pythonpath=--with-python="/c/python25/python"
+	fi
+        ;;
+cygwin*)
+	#echo "cygwin"
+	INSTALL="install -D"
+        ;;
+esac
+
+echo "INSTALL=$INSTALL"
+echo "PDB2PQR_SRC=src/$PDB2PQR_VERSION" > Makefile
+echo "INSTALL=$INSTALL" >> Makefile
+cat Makefile.in >>Makefile
+
+cd src/$PDB2PQR_VERSION
+./configure --prefix=${FREEMOL}/share/pdb2pqr --disable-propka --disable-pdb2pka $pythonpath

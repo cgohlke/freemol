@@ -1,0 +1,16 @@
+all:
+	cd $(PDB2PQR_SRC);make
+
+install:
+	install -d $(FREEMOL)/share/pdb2pqr
+	cd $(PDB2PQR_SRC); \
+	    cp -av *.py src extensions dat propka30 \
+	    $(FREEMOL)/share/pdb2pqr
+	$(INSTALL) $(PDB2PQR_SRC)/COPYING $(FREEMOL)/licenses/pdb2pqr.txt
+	rm -rf $(FREEMOL)/share/pdb2pqr/doc
+	rm -rf $(FREEMOL)/share/pdb2pdr/examples
+
+clean:
+	rm -rf $(PDB2PQR_SRC)
+	rm -f Makefile
+

@@ -1,0 +1,13 @@
+import glob
+
+SourceSignatures('MD5')
+cfiles = glob.glob("*.c")
+mainfileidx = cfiles.index('gmmx.c')
+
+splitindex = cfiles.index('split.c')
+del(cfiles[splitindex])
+#cfiles.reverse()
+
+prog = Program('mengine', cfiles, LIBS=['m'], CCFLAGS='')
+
+Install('#build', [prog, 'mmff94.prm', 'mmxconst.prm'])

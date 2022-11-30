@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# would do any platform-specific configuration here...
+
+if ! [ $FREEMOL ]; then
+ echo "FREEMOL variable must be defined"
+ exit
+fi
+
+echo "Will install into " $FREEMOL

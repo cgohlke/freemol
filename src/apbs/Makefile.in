@@ -1,0 +1,16 @@
+all:
+	$(MAKE) -C $(APBS_BLD)
+install:
+# stripped-down minimal install	
+	$(MAKE) -C $(APBS_BLD) install
+	$(RM) -r $(FREEMOL)/share/apbs/doc
+	$(RM) -r $(FREEMOL)/share/apbs/examples
+	$(RM) -r $(FREEMOL)/share/apbs/tools/matlab
+	install -d $(FREEMOL)/licenses
+	install $(APBS_SRC)/doc/license/LICENSE.txt $(FREEMOL)/licenses/apbs.txt
+clean:
+	$(RM) -r $(APBS_BLD)
+	rm -rf $(APBS_SRC)
+	rm -f Makefile
+
+#rm ${FREEMOL}/share/tools/*/*.o

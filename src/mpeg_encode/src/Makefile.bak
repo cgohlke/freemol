@@ -1,0 +1,715 @@
+# 
+# Copyright (c) 1995 The Regents of the University of California.
+# All rights reserved.
+# 
+# Permission to use, copy, modify, and distribute this software and its
+# documentation for any purpose, without fee, and without written agreement is
+# hereby granted, provided that the above copyright notice and the following
+# two paragraphs appear in all copies of this software.
+# 
+# IN NO EVENT SHALL THE UNIVERSITY OF CALIFORNIA BE LIABLE TO ANY PARTY FOR
+# DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES ARISING OUT
+# OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF THE UNIVERSITY OF
+# CALIFORNIA HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# 
+# THE UNIVERSITY OF CALIFORNIA SPECIFICALLY DISCLAIMS ANY WARRANTIES,
+# INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+# AND FITNESS FOR A PARTICULAR PURPOSE.  THE SOFTWARE PROVIDED HEREUNDER IS
+# ON AN "AS IS" BASIS, AND THE UNIVERSITY OF CALIFORNIA HAS NO OBLIGATION TO
+# PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+# 
+
+#  
+#  $Header: /n/video/199/eyhung/encode/RCS/Makefile,v 1.7 1995/02/02 02:25:51 eyhung Exp $
+# 
+
+##############################################################################
+#
+# Configurable items
+#
+
+################################################################
+# PROFILING # use -pg or -p if and only if you want to profile #
+################################################################
+PROFLAG =
+
+##############
+# JPEG STUFF #
+##############
+JPEG_LIB = jpeg/libjpeg.a
+JPEG_DIR = -Ijpeg
+JPEG_LIB_DIR = -Ljpeg
+MP_JPEG_OBJS = jpeg.o
+MP_JPEG_SRCS = jpeg.c
+
+####################################################################
+# DEBUGGING # use -g if and only if you want to debug, else use -O #
+####################################################################
+#DEBUGFLAG = -g 
+DEBUGFLAG = -O
+
+###############################################################################
+# MISSING PROTOTYES # use -DMISSING_PROTOS if your standard headers are wrong #
+###############################################################################
+PROTOFLAG = 
+#PROTOFLAG = -DMISSING_PROTOS
+
+#################
+# INCLUDE FILES # 
+#################
+INCLUDEDIR = -Iheaders -I/usr/include $(JPEG_DIR)
+
+############################################################################
+# LIBRARIES # specify library directories; need jpg lib and maybe pbm	   #
+############################################################################
+#LIBDIRS = -L$(PBMLIBDIR) $(JPEG_LIB_DIR)
+LIBDIRS = $(JPEG_LIB_DIR)
+
+#####################################################################
+# COMPILER # specify compiler; should be ANSI-compliant if possible #
+#####################################################################
+CC = gcc
+
+################################################
+# MAKE # command to use for the "make" command #
+################################################
+MAKE = make
+
+###################################################
+# COMPILER FLAGS # modify for different compilers #
+###################################################
+# use -DLONG_32 iff
+#	1) long's are 32 bits and
+#	2) int's are not
+#
+# if you don't have <netinet/in.h> then you must define one of the following
+#     -DFORCE_BIG_ENDIAN
+#     -DFORCE_LITTLE_ENDIAN
+#
+# if you are using a non-ANSI compiler, then use:
+#	-DNON_ANSI_COMPILER
+#
+# one other option:
+#	-DHEINOUS_DEBUG_MODE
+#
+# listed below are some suggested CFLAG lines for various compilers
+# 
+
+#	gcc
+CFLAGS	      =  $(INCLUDEDIR) $(DEBUGFLAG) -Wall -Wmissing-prototypes $(PROFLAG) $(PROTOFLAG)
+
+#	gcc-strict
+#CFLAGS	      =  $(INCLUDEDIR) $(DEBUGFLAG) -pedantic -Wall -Waggregate-return -Wtraditional -Wshadow -Wpointer-arith -Wno-parentheses -Wwrite-strings -Wconversion -Wcast-qual -Wcast-align -Wnested-externs -Wuninitialized -Wmissing-prototypes $(PROFLAG) $(PROTOFLAG)
+
+#	SUN cc
+#CFLAGS = $(INCLUDEDIR) $(DEBUGFLAG) $(PROFLAG) $(PROTOFLAG) -DNON_ANSI_COMPILER
+
+#	HP cc
+#CFLAGS = $(INCLUDEDIR) $(DEBUGFLAG) $(PROFLAG) $(PROTOFLAG) -DNON_ANSI_COMPILER
+
+#	HP gcc
+#CFLAGS = $(INCLUDEDIR) $(DEBUGFLAG) $(PROFLAG)
+
+#	DEC ALPHA cc
+#CFLAGS = $(INCLUDEDIR) -Olimit 1200 $(DEBUGFLAG) $(PROFLAG) $(PROTOFLAG)
+
+#	DEC Ultrix gcc
+#CFLAGS = $(INCLUDEDIR) $(DEBUGFLAG) -Wall -Wmissing-prototypes $(PROFLAG) $(PROTOFLAG) -DMIPS
+
+# 	SGI cc
+#CFLAGS = $(INCLUDEDIR) $(DEBUGFLAG) $(PROFLAG) $(PROTOFLAG) -cckr -DIRIX
+
+#	Intel-based SVR4.0 cc
+#CFLAGS = $(INCLUDEDIR) $(DEBUGFLAG) $(PROFLAG) $(PROTOFLAG) -DLONG_32 -DSVR4 -DSYSV386
+
+#	Intel-based SCO Unix
+#CFLAGS =  $(INCLUDEDIR) $(DEBUGFLAG) $(PROFLAG) $(PROTOFLAG) -Dsco -m486
+
+# linux CFLAGS
+#CFLAGS  = $(INCLUDEDIR) -m486 -fomit-frame-pointer -ffast-math -finline-functions $(DEBUGFLAG) $(PROFLAG) $(PROTOFLAG) -DLONG_32 -DSYSV -DLINUX
+
+#	IBM RS/6000 cc
+#CFLAGS = $(INCLUDEDIR) $(DEBUGFLAG) $(PROFLAG) $(PROTOFLAG)
+
+# DOS
+#CFLAGS        =  $(INCLUDEDIR) $(DEBUGFLAG) -O1 -DSYSV -DFORCE_LITTLE_ENDIAN -w-rvl -w-rch -w-eff -w-ccc -w-par -w-use -w-aus -w-pro $(PROFLAG) $(PROTOFLAG)
+
+
+#########################################################################
+# LIBRARIES # same for most machines; may need to add stuff for sockets #
+#########################################################################
+#	this works for most machines
+LIBS = $(JPEG_LIB) -lm
+
+#	Solaris
+#LIBS = $(JPEG_LIB) -lm -lsocket -lnsl
+
+#	Intel-based SVR4.0
+#LIBS = $(JPEG_LIB) -lm -lsocket -lnsl -lgen
+
+#	Intel-based SCO Unix
+#LIBS = $(JPEG_LIB) -lX11 -lsocket -lmalloc -lPW -lc_s -lm 
+
+
+###############
+# OTHER STUFF #
+###############
+#PURIFY = purify -cache-dir=/tmp
+PURIFY =
+
+#
+# End of configurable options.  Just type make and have fun.
+##############################################################################
+
+MP_BASE_OBJS = mfwddct.o postdct.o huff.o bitio.o mheaders.o
+MP_BASE_SRCS = mfwddct.c postdct.c huff.c bitio.c mheaders.c
+MP_ENCODE_OBJS = iframe.o pframe.o bframe.o psearch.o bsearch.o block.o 
+MP_ENCODE_SRCS = iframe.c pframe.c bframe.c psearch.c bsearch.c block.c 
+MP_OTHER_OBJS = mpeg.o subsample.o param.o rgbtoycc.o \
+	readframe.o combine.o jrevdct.o frame.o fsize.o frametype.o \
+	libpnmrw.o specifics.o rate.o opts.o
+MP_OTHER_SRCS = mpeg.c subsample.c param.c rgbtoycc.c \
+	readframe.c combine.c jrevdct.c frame.c fsize.c frametype.c \
+	libpnmrw.c specifics.c rate.c opts.c
+MP_PARALLEL_OBJS = parallel.o
+MP_PARALLEL_SRCS = parallel.c
+MP_ALL_SRCS = $(MP_BASE_SRCS) $(MP_OTHER_SRCS) $(MP_ENCODE_SRCS) \
+	      $(MP_PARALLEL_SRCS) $(MP_JPEG_SRCS) main.c
+MP_ALL_OBJS = $(MP_BASE_OBJS) $(MP_OTHER_OBJS) $(MP_ENCODE_OBJS) \
+	      $(MP_PARALLEL_OBJS) $(MP_JPEG_OBJS) main.o
+MP_INCLUDE = mproto.h mtypes.h huff.h bitio.h
+MP_MISC = Makefile huff.table parse_huff.pl
+
+all: mpeg_encode
+
+#########
+# TESTS #
+#########
+
+test:
+	rm -f /tmp/ts.stat
+	./mpeg_encode -stat /tmp/ts.stat ./tst/ts.param
+	csh ./tst/diffscript /tmp/ts.stat ./tst/ts.stat /tmp/ts.mpg ./tst/ts.mpg
+
+testd:
+	rm -f /tmp/tsd.stat
+	./mpeg_encode -stat /tmp/tsd.stat ./tst/tsd.param
+	csh ./tst/diffscript /tmp/tsd.stat ./tst/tsd.stat /tmp/tsd.mpg ./tst/tsd.mpg
+
+test_all: test testd
+
+############
+# BINARIES #
+############
+
+mpeg_encode: $(MP_ALL_OBJS) $(JPEG_LIB)
+	$(PURIFY) $(CC) $(CFLAGS) -o $@ $(MP_ALL_OBJS) $(LIBDIRS) $(LIBS)
+	strip mpeg_encode
+
+profile: $(MP_ALL_OBJS)
+	$(PURIFY) $(CC) -Bstatic -pg $(CFLAGS) -o $@ $(MP_ALL_OBJS) $(LIBDIRS) $(LIBS)
+
+#########
+# OTHER #
+#########
+
+# make JPEG compile itself
+jpeg/libjpeg.a:
+	(cd jpeg; $(MAKE) libjpeg.a)
+
+#
+# Perl is necessary if you want to modify the Huffman RLE encoding table.
+#
+PERL = perl
+
+# The following stuff is for the Huffman encoding tables.  It's commented-out
+# because you probably don't want to change this.  If you do, then uncommment
+# it.
+#
+# huff.h: huff.c
+#
+# huff.c: parse_huff.pl huff.table
+#	$(PERL) parse_huff.pl huff.table
+
+headers.o: headers.c
+	$(CC) $(CFLAGS) -c headers.c
+
+depend: huff.c
+	makedepend -- $(CFLAGS) -- $(MP_ALL_SRCS)
+
+wc:;		wc -l *.[ch] headers/*.h *.pl *.table
+ci:;		ci -l $(MP_ALL_SRCS) $(MP_INCLUDE) $(MP_MISC)
+tags: $(MP_ALL_SRCS)
+	ctags -t $(MP_ALL_SRCS)
+	etags -f TAGS -t $(MP_ALL_SRCS) headers/*.h
+
+new:
+	rm -f *.o core *~ gmon.out
+	$(MAKE) depend
+
+clean:
+	-rm -f *.o core *~ gmon.out
+	$(MAKE) depend
+	-$(MAKE) tags
+
+#
+# WARNING: this assumes you're using GNU indent...
+#
+indent:;	indent -T FILE -T int8 -T int16 -T int32 -T uint8 -T uint16 -T uint32  -T BitBucket -T MpegFrame -T Block -T FlatBlock $(MP_ALL_SRCS)
+
+spotless: clean	
+	rm -f huff.c huff.h *.pure.a
+	cd jpeg; $(MAKE) clean
+
+##############################################################################
+# DO NOT DELETE THIS LINE -- make depend depends on it.
+
+mfwddct.o: all.h /usr/include/stdio.h /usr/include/features.h
+mfwddct.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h
+mfwddct.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stddef.h
+mfwddct.o: /usr/include/bits/types.h /usr/include/bits/wordsize.h
+mfwddct.o: /usr/include/bits/typesizes.h /usr/include/libio.h
+mfwddct.o: /usr/include/_G_config.h /usr/include/wchar.h
+mfwddct.o: /usr/include/bits/wchar.h /usr/include/gconv.h
+mfwddct.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stdarg.h
+mfwddct.o: /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h
+mfwddct.o: /usr/include/stdlib.h /usr/include/math.h
+mfwddct.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
+mfwddct.o: /usr/include/bits/mathcalls.h /usr/include/memory.h
+mfwddct.o: /usr/include/string.h /usr/include/limits.h /usr/include/limits.h
+mfwddct.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/limits.h
+mfwddct.o: libpnmrw.h /usr/include/malloc.h ansi.h general.h dct.h mtypes.h
+mfwddct.o: opts.h
+postdct.o: /usr/include/assert.h /usr/include/features.h
+postdct.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h all.h
+postdct.o: /usr/include/stdio.h
+postdct.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stddef.h
+postdct.o: /usr/include/bits/types.h /usr/include/bits/wordsize.h
+postdct.o: /usr/include/bits/typesizes.h /usr/include/libio.h
+postdct.o: /usr/include/_G_config.h /usr/include/wchar.h
+postdct.o: /usr/include/bits/wchar.h /usr/include/gconv.h
+postdct.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stdarg.h
+postdct.o: /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h
+postdct.o: /usr/include/stdlib.h /usr/include/math.h
+postdct.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
+postdct.o: /usr/include/bits/mathcalls.h /usr/include/memory.h
+postdct.o: /usr/include/string.h /usr/include/limits.h /usr/include/limits.h
+postdct.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/limits.h
+postdct.o: libpnmrw.h /usr/include/malloc.h ansi.h general.h mtypes.h dct.h
+postdct.o: bitio.h huff.h postdct.h opts.h
+huff.o: mtypes.h general.h dct.h ansi.h huff.h
+bitio.o: /usr/include/assert.h /usr/include/features.h
+bitio.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h all.h
+bitio.o: /usr/include/stdio.h
+bitio.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stddef.h
+bitio.o: /usr/include/bits/types.h /usr/include/bits/wordsize.h
+bitio.o: /usr/include/bits/typesizes.h /usr/include/libio.h
+bitio.o: /usr/include/_G_config.h /usr/include/wchar.h
+bitio.o: /usr/include/bits/wchar.h /usr/include/gconv.h
+bitio.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stdarg.h
+bitio.o: /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h
+bitio.o: /usr/include/stdlib.h /usr/include/math.h
+bitio.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
+bitio.o: /usr/include/bits/mathcalls.h /usr/include/memory.h
+bitio.o: /usr/include/string.h /usr/include/limits.h /usr/include/limits.h
+bitio.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/limits.h
+bitio.o: libpnmrw.h /usr/include/malloc.h ansi.h general.h byteorder.h
+bitio.o: /usr/include/sys/types.h /usr/include/time.h
+bitio.o: /usr/include/netinet/in.h /usr/include/stdint.h
+bitio.o: /usr/include/sys/socket.h /usr/include/sys/uio.h
+bitio.o: /usr/include/bits/uio.h /usr/include/bits/socket.h
+bitio.o: /usr/include/bits/sockaddr.h /usr/include/asm/socket.h
+bitio.o: /usr/include/asm-x86_64/socket.h /usr/include/asm/sockios.h
+bitio.o: /usr/include/asm-x86_64/sockios.h /usr/include/bits/in.h
+bitio.o: /usr/include/endian.h /usr/include/bits/endian.h
+bitio.o: /usr/include/bits/byteswap.h bitio.h mtypes.h dct.h
+mheaders.o: all.h /usr/include/stdio.h /usr/include/features.h
+mheaders.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h
+mheaders.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stddef.h
+mheaders.o: /usr/include/bits/types.h /usr/include/bits/wordsize.h
+mheaders.o: /usr/include/bits/typesizes.h /usr/include/libio.h
+mheaders.o: /usr/include/_G_config.h /usr/include/wchar.h
+mheaders.o: /usr/include/bits/wchar.h /usr/include/gconv.h
+mheaders.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stdarg.h
+mheaders.o: /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h
+mheaders.o: /usr/include/stdlib.h /usr/include/math.h
+mheaders.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
+mheaders.o: /usr/include/bits/mathcalls.h /usr/include/memory.h
+mheaders.o: /usr/include/string.h /usr/include/limits.h /usr/include/limits.h
+mheaders.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/limits.h
+mheaders.o: libpnmrw.h /usr/include/malloc.h ansi.h general.h bitio.h
+mheaders.o: frames.h mtypes.h dct.h mheaders.h frame.h
+mpeg.o: all.h /usr/include/stdio.h /usr/include/features.h
+mpeg.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h
+mpeg.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stddef.h
+mpeg.o: /usr/include/bits/types.h /usr/include/bits/wordsize.h
+mpeg.o: /usr/include/bits/typesizes.h /usr/include/libio.h
+mpeg.o: /usr/include/_G_config.h /usr/include/wchar.h
+mpeg.o: /usr/include/bits/wchar.h /usr/include/gconv.h
+mpeg.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stdarg.h
+mpeg.o: /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h
+mpeg.o: /usr/include/stdlib.h /usr/include/math.h
+mpeg.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
+mpeg.o: /usr/include/bits/mathcalls.h /usr/include/memory.h
+mpeg.o: /usr/include/string.h /usr/include/limits.h /usr/include/limits.h
+mpeg.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/limits.h
+mpeg.o: libpnmrw.h /usr/include/malloc.h ansi.h general.h /usr/include/time.h
+mpeg.o: /usr/include/errno.h /usr/include/bits/errno.h
+mpeg.o: /usr/include/linux/errno.h /usr/include/asm/errno.h
+mpeg.o: /usr/include/asm-x86_64/errno.h /usr/include/unistd.h
+mpeg.o: /usr/include/bits/posix_opt.h /usr/include/bits/confname.h mtypes.h
+mpeg.o: dct.h frames.h mheaders.h bitio.h frame.h search.h mpeg.h
+mpeg.o: prototypes.h parallel.h param.h readframe.h fsize.h rate.h
+mpeg.o: /usr/include/sys/stat.h /usr/include/bits/stat.h
+subsample.o: all.h /usr/include/stdio.h /usr/include/features.h
+subsample.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h
+subsample.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stddef.h
+subsample.o: /usr/include/bits/types.h /usr/include/bits/wordsize.h
+subsample.o: /usr/include/bits/typesizes.h /usr/include/libio.h
+subsample.o: /usr/include/_G_config.h /usr/include/wchar.h
+subsample.o: /usr/include/bits/wchar.h /usr/include/gconv.h
+subsample.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stdarg.h
+subsample.o: /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h
+subsample.o: /usr/include/stdlib.h /usr/include/math.h
+subsample.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
+subsample.o: /usr/include/bits/mathcalls.h /usr/include/memory.h
+subsample.o: /usr/include/string.h /usr/include/limits.h
+subsample.o: /usr/include/limits.h
+subsample.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/limits.h
+subsample.o: libpnmrw.h /usr/include/malloc.h ansi.h general.h mtypes.h dct.h
+subsample.o: frames.h mheaders.h bitio.h frame.h prototypes.h
+param.o: all.h /usr/include/stdio.h /usr/include/features.h
+param.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h
+param.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stddef.h
+param.o: /usr/include/bits/types.h /usr/include/bits/wordsize.h
+param.o: /usr/include/bits/typesizes.h /usr/include/libio.h
+param.o: /usr/include/_G_config.h /usr/include/wchar.h
+param.o: /usr/include/bits/wchar.h /usr/include/gconv.h
+param.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stdarg.h
+param.o: /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h
+param.o: /usr/include/stdlib.h /usr/include/math.h
+param.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
+param.o: /usr/include/bits/mathcalls.h /usr/include/memory.h
+param.o: /usr/include/string.h /usr/include/limits.h /usr/include/limits.h
+param.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/limits.h
+param.o: libpnmrw.h /usr/include/malloc.h ansi.h general.h mtypes.h dct.h
+param.o: mpeg.h frame.h search.h prototypes.h parallel.h bitio.h param.h
+param.o: readframe.h fsize.h frames.h mheaders.h jpeg.h /usr/include/ctype.h
+param.o: /usr/include/endian.h /usr/include/bits/endian.h rate.h opts.h
+rgbtoycc.o: all.h /usr/include/stdio.h /usr/include/features.h
+rgbtoycc.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h
+rgbtoycc.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stddef.h
+rgbtoycc.o: /usr/include/bits/types.h /usr/include/bits/wordsize.h
+rgbtoycc.o: /usr/include/bits/typesizes.h /usr/include/libio.h
+rgbtoycc.o: /usr/include/_G_config.h /usr/include/wchar.h
+rgbtoycc.o: /usr/include/bits/wchar.h /usr/include/gconv.h
+rgbtoycc.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stdarg.h
+rgbtoycc.o: /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h
+rgbtoycc.o: /usr/include/stdlib.h /usr/include/math.h
+rgbtoycc.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
+rgbtoycc.o: /usr/include/bits/mathcalls.h /usr/include/memory.h
+rgbtoycc.o: /usr/include/string.h /usr/include/limits.h /usr/include/limits.h
+rgbtoycc.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/limits.h
+rgbtoycc.o: libpnmrw.h /usr/include/malloc.h ansi.h general.h frame.h
+rgbtoycc.o: mtypes.h dct.h fsize.h rgbtoycc.h
+readframe.o: all.h /usr/include/stdio.h /usr/include/features.h
+readframe.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h
+readframe.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stddef.h
+readframe.o: /usr/include/bits/types.h /usr/include/bits/wordsize.h
+readframe.o: /usr/include/bits/typesizes.h /usr/include/libio.h
+readframe.o: /usr/include/_G_config.h /usr/include/wchar.h
+readframe.o: /usr/include/bits/wchar.h /usr/include/gconv.h
+readframe.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stdarg.h
+readframe.o: /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h
+readframe.o: /usr/include/stdlib.h /usr/include/math.h
+readframe.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
+readframe.o: /usr/include/bits/mathcalls.h /usr/include/memory.h
+readframe.o: /usr/include/string.h /usr/include/limits.h
+readframe.o: /usr/include/limits.h
+readframe.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/limits.h
+readframe.o: libpnmrw.h /usr/include/malloc.h ansi.h general.h
+readframe.o: /usr/include/time.h /usr/include/errno.h
+readframe.o: /usr/include/bits/errno.h /usr/include/linux/errno.h
+readframe.o: /usr/include/asm/errno.h /usr/include/asm-x86_64/errno.h
+readframe.o: /usr/include/ctype.h /usr/include/endian.h
+readframe.o: /usr/include/bits/endian.h /usr/include/unistd.h
+readframe.o: /usr/include/bits/posix_opt.h /usr/include/bits/confname.h
+readframe.o: mtypes.h dct.h frames.h mheaders.h bitio.h frame.h prototypes.h
+readframe.o: parallel.h param.h readframe.h fsize.h rgbtoycc.h jpeg.h opts.h
+combine.o: all.h /usr/include/stdio.h /usr/include/features.h
+combine.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h
+combine.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stddef.h
+combine.o: /usr/include/bits/types.h /usr/include/bits/wordsize.h
+combine.o: /usr/include/bits/typesizes.h /usr/include/libio.h
+combine.o: /usr/include/_G_config.h /usr/include/wchar.h
+combine.o: /usr/include/bits/wchar.h /usr/include/gconv.h
+combine.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stdarg.h
+combine.o: /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h
+combine.o: /usr/include/stdlib.h /usr/include/math.h
+combine.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
+combine.o: /usr/include/bits/mathcalls.h /usr/include/memory.h
+combine.o: /usr/include/string.h /usr/include/limits.h /usr/include/limits.h
+combine.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/limits.h
+combine.o: libpnmrw.h /usr/include/malloc.h ansi.h general.h
+combine.o: /usr/include/time.h /usr/include/errno.h /usr/include/bits/errno.h
+combine.o: /usr/include/linux/errno.h /usr/include/asm/errno.h
+combine.o: /usr/include/asm-x86_64/errno.h mtypes.h dct.h frames.h mheaders.h
+combine.o: bitio.h frame.h search.h mpeg.h prototypes.h parallel.h param.h
+combine.o: readframe.h fsize.h combine.h /usr/include/unistd.h
+combine.o: /usr/include/bits/posix_opt.h /usr/include/bits/confname.h
+jrevdct.o: /usr/include/memory.h /usr/include/features.h
+jrevdct.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h
+jrevdct.o: /usr/include/string.h
+jrevdct.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stddef.h all.h
+jrevdct.o: /usr/include/stdio.h /usr/include/bits/types.h
+jrevdct.o: /usr/include/bits/wordsize.h /usr/include/bits/typesizes.h
+jrevdct.o: /usr/include/libio.h /usr/include/_G_config.h /usr/include/wchar.h
+jrevdct.o: /usr/include/bits/wchar.h /usr/include/gconv.h
+jrevdct.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stdarg.h
+jrevdct.o: /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h
+jrevdct.o: /usr/include/stdlib.h /usr/include/math.h
+jrevdct.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
+jrevdct.o: /usr/include/bits/mathcalls.h /usr/include/limits.h
+jrevdct.o: /usr/include/limits.h
+jrevdct.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/limits.h
+jrevdct.o: libpnmrw.h /usr/include/malloc.h ansi.h general.h dct.h
+frame.o: all.h /usr/include/stdio.h /usr/include/features.h
+frame.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h
+frame.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stddef.h
+frame.o: /usr/include/bits/types.h /usr/include/bits/wordsize.h
+frame.o: /usr/include/bits/typesizes.h /usr/include/libio.h
+frame.o: /usr/include/_G_config.h /usr/include/wchar.h
+frame.o: /usr/include/bits/wchar.h /usr/include/gconv.h
+frame.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stdarg.h
+frame.o: /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h
+frame.o: /usr/include/stdlib.h /usr/include/math.h
+frame.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
+frame.o: /usr/include/bits/mathcalls.h /usr/include/memory.h
+frame.o: /usr/include/string.h /usr/include/limits.h /usr/include/limits.h
+frame.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/limits.h
+frame.o: libpnmrw.h /usr/include/malloc.h ansi.h general.h mtypes.h dct.h
+frame.o: frames.h mheaders.h bitio.h frame.h fsize.h
+fsize.o: all.h /usr/include/stdio.h /usr/include/features.h
+fsize.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h
+fsize.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stddef.h
+fsize.o: /usr/include/bits/types.h /usr/include/bits/wordsize.h
+fsize.o: /usr/include/bits/typesizes.h /usr/include/libio.h
+fsize.o: /usr/include/_G_config.h /usr/include/wchar.h
+fsize.o: /usr/include/bits/wchar.h /usr/include/gconv.h
+fsize.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stdarg.h
+fsize.o: /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h
+fsize.o: /usr/include/stdlib.h /usr/include/math.h
+fsize.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
+fsize.o: /usr/include/bits/mathcalls.h /usr/include/memory.h
+fsize.o: /usr/include/string.h /usr/include/limits.h /usr/include/limits.h
+fsize.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/limits.h
+fsize.o: libpnmrw.h /usr/include/malloc.h ansi.h general.h fsize.h dct.h
+frametype.o: all.h /usr/include/stdio.h /usr/include/features.h
+frametype.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h
+frametype.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stddef.h
+frametype.o: /usr/include/bits/types.h /usr/include/bits/wordsize.h
+frametype.o: /usr/include/bits/typesizes.h /usr/include/libio.h
+frametype.o: /usr/include/_G_config.h /usr/include/wchar.h
+frametype.o: /usr/include/bits/wchar.h /usr/include/gconv.h
+frametype.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stdarg.h
+frametype.o: /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h
+frametype.o: /usr/include/stdlib.h /usr/include/math.h
+frametype.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
+frametype.o: /usr/include/bits/mathcalls.h /usr/include/memory.h
+frametype.o: /usr/include/string.h /usr/include/limits.h
+frametype.o: /usr/include/limits.h
+frametype.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/limits.h
+frametype.o: libpnmrw.h /usr/include/malloc.h ansi.h general.h prototypes.h
+frametype.o: frame.h mtypes.h dct.h frames.h mheaders.h bitio.h param.h
+libpnmrw.o: /usr/include/stdio.h /usr/include/features.h
+libpnmrw.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h
+libpnmrw.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stddef.h
+libpnmrw.o: /usr/include/bits/types.h /usr/include/bits/wordsize.h
+libpnmrw.o: /usr/include/bits/typesizes.h /usr/include/libio.h
+libpnmrw.o: /usr/include/_G_config.h /usr/include/wchar.h
+libpnmrw.o: /usr/include/bits/wchar.h /usr/include/gconv.h
+libpnmrw.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stdarg.h
+libpnmrw.o: /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h
+libpnmrw.o: libpnmrw.h /usr/include/malloc.h /usr/include/string.h
+specifics.o: all.h /usr/include/stdio.h /usr/include/features.h
+specifics.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h
+specifics.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stddef.h
+specifics.o: /usr/include/bits/types.h /usr/include/bits/wordsize.h
+specifics.o: /usr/include/bits/typesizes.h /usr/include/libio.h
+specifics.o: /usr/include/_G_config.h /usr/include/wchar.h
+specifics.o: /usr/include/bits/wchar.h /usr/include/gconv.h
+specifics.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stdarg.h
+specifics.o: /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h
+specifics.o: /usr/include/stdlib.h /usr/include/math.h
+specifics.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
+specifics.o: /usr/include/bits/mathcalls.h /usr/include/memory.h
+specifics.o: /usr/include/string.h /usr/include/limits.h
+specifics.o: /usr/include/limits.h
+specifics.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/limits.h
+specifics.o: libpnmrw.h /usr/include/malloc.h ansi.h general.h mtypes.h dct.h
+specifics.o: frames.h mheaders.h bitio.h frame.h fsize.h specifics.h
+specifics.o: prototypes.h
+rate.o: /usr/include/sys/times.h /usr/include/features.h
+rate.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h /usr/include/time.h
+rate.o: /usr/include/bits/types.h /usr/include/bits/wordsize.h
+rate.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stddef.h
+rate.o: /usr/include/bits/typesizes.h all.h /usr/include/stdio.h
+rate.o: /usr/include/libio.h /usr/include/_G_config.h /usr/include/wchar.h
+rate.o: /usr/include/bits/wchar.h /usr/include/gconv.h
+rate.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stdarg.h
+rate.o: /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h
+rate.o: /usr/include/stdlib.h /usr/include/math.h
+rate.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
+rate.o: /usr/include/bits/mathcalls.h /usr/include/memory.h
+rate.o: /usr/include/string.h /usr/include/limits.h /usr/include/limits.h
+rate.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/limits.h
+rate.o: libpnmrw.h /usr/include/malloc.h ansi.h general.h mtypes.h dct.h
+rate.o: bitio.h frames.h mheaders.h frame.h prototypes.h param.h fsize.h
+rate.o: postdct.h mpeg.h parallel.h rate.h
+opts.o: /usr/include/stdio.h /usr/include/features.h /usr/include/sys/cdefs.h
+opts.o: /usr/include/gnu/stubs.h
+opts.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stddef.h
+opts.o: /usr/include/bits/types.h /usr/include/bits/wordsize.h
+opts.o: /usr/include/bits/typesizes.h /usr/include/libio.h
+opts.o: /usr/include/_G_config.h /usr/include/wchar.h
+opts.o: /usr/include/bits/wchar.h /usr/include/gconv.h
+opts.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stdarg.h
+opts.o: /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h
+opts.o: /usr/include/string.h opts.h general.h ansi.h mtypes.h dct.h
+opts.o: /usr/include/malloc.h /usr/include/math.h
+opts.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
+opts.o: /usr/include/bits/mathcalls.h
+iframe.o: /usr/include/sys/times.h /usr/include/features.h
+iframe.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h
+iframe.o: /usr/include/time.h /usr/include/bits/types.h
+iframe.o: /usr/include/bits/wordsize.h
+iframe.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stddef.h
+iframe.o: /usr/include/bits/typesizes.h /usr/include/sys/param.h
+iframe.o: /usr/include/limits.h /usr/include/limits.h
+iframe.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/limits.h
+iframe.o: /usr/include/linux/limits.h /usr/include/linux/param.h
+iframe.o: /usr/include/asm/param.h /usr/include/asm-x86_64/param.h
+iframe.o: /usr/include/sys/types.h all.h /usr/include/stdio.h
+iframe.o: /usr/include/libio.h /usr/include/_G_config.h /usr/include/wchar.h
+iframe.o: /usr/include/bits/wchar.h /usr/include/gconv.h
+iframe.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stdarg.h
+iframe.o: /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h
+iframe.o: /usr/include/stdlib.h /usr/include/math.h
+iframe.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
+iframe.o: /usr/include/bits/mathcalls.h /usr/include/memory.h
+iframe.o: /usr/include/string.h libpnmrw.h /usr/include/malloc.h ansi.h
+iframe.o: general.h mtypes.h dct.h frames.h mheaders.h bitio.h frame.h
+iframe.o: prototypes.h mpeg.h param.h fsize.h parallel.h postdct.h rate.h
+iframe.o: opts.h
+pframe.o: /usr/include/assert.h /usr/include/features.h
+pframe.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h
+pframe.o: /usr/include/sys/param.h /usr/include/limits.h
+pframe.o: /usr/include/limits.h
+pframe.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/limits.h
+pframe.o: /usr/include/linux/limits.h /usr/include/linux/param.h
+pframe.o: /usr/include/asm/param.h /usr/include/asm-x86_64/param.h
+pframe.o: /usr/include/sys/types.h /usr/include/bits/types.h
+pframe.o: /usr/include/bits/wordsize.h
+pframe.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stddef.h
+pframe.o: /usr/include/bits/typesizes.h /usr/include/time.h all.h
+pframe.o: /usr/include/stdio.h /usr/include/libio.h /usr/include/_G_config.h
+pframe.o: /usr/include/wchar.h /usr/include/bits/wchar.h /usr/include/gconv.h
+pframe.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stdarg.h
+pframe.o: /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h
+pframe.o: /usr/include/stdlib.h /usr/include/math.h
+pframe.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
+pframe.o: /usr/include/bits/mathcalls.h /usr/include/memory.h
+pframe.o: /usr/include/string.h libpnmrw.h /usr/include/malloc.h ansi.h
+pframe.o: general.h mtypes.h dct.h bitio.h frames.h mheaders.h frame.h
+pframe.o: prototypes.h param.h fsize.h postdct.h mpeg.h parallel.h rate.h
+pframe.o: opts.h
+bframe.o: all.h /usr/include/stdio.h /usr/include/features.h
+bframe.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h
+bframe.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stddef.h
+bframe.o: /usr/include/bits/types.h /usr/include/bits/wordsize.h
+bframe.o: /usr/include/bits/typesizes.h /usr/include/libio.h
+bframe.o: /usr/include/_G_config.h /usr/include/wchar.h
+bframe.o: /usr/include/bits/wchar.h /usr/include/gconv.h
+bframe.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stdarg.h
+bframe.o: /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h
+bframe.o: /usr/include/stdlib.h /usr/include/math.h
+bframe.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
+bframe.o: /usr/include/bits/mathcalls.h /usr/include/memory.h
+bframe.o: /usr/include/string.h /usr/include/limits.h /usr/include/limits.h
+bframe.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/limits.h
+bframe.o: libpnmrw.h /usr/include/malloc.h ansi.h general.h
+bframe.o: /usr/include/sys/param.h /usr/include/linux/limits.h
+bframe.o: /usr/include/linux/param.h /usr/include/asm/param.h
+bframe.o: /usr/include/asm-x86_64/param.h /usr/include/sys/types.h
+bframe.o: /usr/include/time.h /usr/include/assert.h mtypes.h dct.h bitio.h
+bframe.o: frames.h mheaders.h frame.h prototypes.h fsize.h param.h postdct.h
+bframe.o: rate.h opts.h
+psearch.o: all.h /usr/include/stdio.h /usr/include/features.h
+psearch.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h
+psearch.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stddef.h
+psearch.o: /usr/include/bits/types.h /usr/include/bits/wordsize.h
+psearch.o: /usr/include/bits/typesizes.h /usr/include/libio.h
+psearch.o: /usr/include/_G_config.h /usr/include/wchar.h
+psearch.o: /usr/include/bits/wchar.h /usr/include/gconv.h
+psearch.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stdarg.h
+psearch.o: /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h
+psearch.o: /usr/include/stdlib.h /usr/include/math.h
+psearch.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
+psearch.o: /usr/include/bits/mathcalls.h /usr/include/memory.h
+psearch.o: /usr/include/string.h /usr/include/limits.h /usr/include/limits.h
+psearch.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/limits.h
+psearch.o: libpnmrw.h /usr/include/malloc.h ansi.h general.h mtypes.h dct.h
+psearch.o: frames.h mheaders.h bitio.h frame.h search.h prototypes.h fsize.h
+psearch.o: param.h
+bsearch.o: all.h /usr/include/stdio.h /usr/include/features.h
+bsearch.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h
+bsearch.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stddef.h
+bsearch.o: /usr/include/bits/types.h /usr/include/bits/wordsize.h
+bsearch.o: /usr/include/bits/typesizes.h /usr/include/libio.h
+bsearch.o: /usr/include/_G_config.h /usr/include/wchar.h
+bsearch.o: /usr/include/bits/wchar.h /usr/include/gconv.h
+bsearch.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stdarg.h
+bsearch.o: /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h
+bsearch.o: /usr/include/stdlib.h /usr/include/math.h
+bsearch.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
+bsearch.o: /usr/include/bits/mathcalls.h /usr/include/memory.h
+bsearch.o: /usr/include/string.h /usr/include/limits.h /usr/include/limits.h
+bsearch.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/limits.h
+bsearch.o: libpnmrw.h /usr/include/malloc.h ansi.h general.h mtypes.h dct.h
+bsearch.o: frames.h mheaders.h bitio.h frame.h search.h fsize.h
+block.o: all.h /usr/include/stdio.h /usr/include/features.h
+block.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h
+block.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stddef.h
+block.o: /usr/include/bits/types.h /usr/include/bits/wordsize.h
+block.o: /usr/include/bits/typesizes.h /usr/include/libio.h
+block.o: /usr/include/_G_config.h /usr/include/wchar.h
+block.o: /usr/include/bits/wchar.h /usr/include/gconv.h
+block.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stdarg.h
+block.o: /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h
+block.o: /usr/include/stdlib.h /usr/include/math.h
+block.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
+block.o: /usr/include/bits/mathcalls.h /usr/include/memory.h
+block.o: /usr/include/string.h /usr/include/limits.h /usr/include/limits.h
+block.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/limits.h
+block.o: libpnmrw.h /usr/include/malloc.h ansi.h general.h mtypes.h dct.h
+block.o: frames.h mheaders.h bitio.h frame.h prototypes.h fsize.h opts.h
+block.o: postdct.h
+main.o: /usr/include/assert.h /usr/include/features.h
+main.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h all.h
+main.o: /usr/include/stdio.h
+main.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stddef.h
+main.o: /usr/include/bits/types.h /usr/include/bits/wordsize.h
+main.o: /usr/include/bits/typesizes.h /usr/include/libio.h
+main.o: /usr/include/_G_config.h /usr/include/wchar.h
+main.o: /usr/include/bits/wchar.h /usr/include/gconv.h
+main.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/stdarg.h
+main.o: /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h
+main.o: /usr/include/stdlib.h /usr/include/math.h
+main.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
+main.o: /usr/include/bits/mathcalls.h /usr/include/memory.h
+main.o: /usr/include/string.h /usr/include/limits.h /usr/include/limits.h
+main.o: /usr/lib/gcc-lib/x86_64-redhat-linux/3.2.3/include/limits.h
+main.o: libpnmrw.h /usr/include/malloc.h ansi.h general.h mtypes.h dct.h
+main.o: mpeg.h frame.h search.h prototypes.h param.h parallel.h bitio.h
+main.o: readframe.h combine.h frames.h mheaders.h jpeg.h specifics.h opts.h
+main.o: /usr/include/time.h
